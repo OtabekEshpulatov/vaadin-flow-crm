@@ -1,11 +1,6 @@
 package com.example.application.data.entity;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Version;
+import jakarta.persistence.*;
 
 @MappedSuperclass
 public abstract class AbstractEntity {
@@ -17,6 +12,7 @@ public abstract class AbstractEntity {
     private Long id;
 
     @Version
+    @Column
     private int version;
 
     public Long getId() {

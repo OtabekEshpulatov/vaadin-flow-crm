@@ -59,11 +59,15 @@
             <version>1.1.0</version>
         </dependency>
 
+
+
+        <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>runtime</scope>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.6.0</version>
         </dependency>
+
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

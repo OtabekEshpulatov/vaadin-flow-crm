@@ -1,20 +1,21 @@
 package com.example.application.data.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
+@Table(name = "CONTACT")
 public class Contact extends AbstractEntity {
-
     @NotEmpty
+    @Column
     private String firstName = "";
 
+
     @NotEmpty
+    @Column
     private String lastName = "";
 
     @ManyToOne
@@ -29,6 +30,7 @@ public class Contact extends AbstractEntity {
 
     @Email
     @NotEmpty
+    @Column
     private String email = "";
 
     @Override

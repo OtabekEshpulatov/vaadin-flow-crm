@@ -1,9 +1,15 @@
 package com.example.application.data.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "STATUS")
 public class Status extends AbstractEntity {
+
+
+    @Column
     private String name;
 
     public Status() {

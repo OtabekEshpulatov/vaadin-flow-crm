@@ -1,0 +1,16 @@
+@media all and (max-width: 1100px) {
+    .list-view.editing .toolbar,
+    .list-view.editing .contact-grid {
+        display: none;
+    }
+}
+
+.delete-confirm {
+    background-color: red;
+    color: white;
+}
+
+a[highlight] {
+    font-weight: bold;
+    text-decoration: underline;
+}

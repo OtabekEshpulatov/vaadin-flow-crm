@@ -1,14 +1,20 @@
 package com.example.application.data.entity;
 
 import jakarta.annotation.Nullable;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import org.hibernate.annotations.Formula;
+
 import java.util.LinkedList;
 import java.util.List;
 
 @Entity
+@Table(name = "COMPANY")
 public class Company extends AbstractEntity {
+    @Column
     @NotBlank
     private String name;
 
@@ -30,5 +36,13 @@ public class Company extends AbstractEntity {
 
     public void setEmployees(List<Contact> employees) {
         this.employees = employees;
+    }
+
+
+
+    @Formula("(select count(c.id) from Contact c where c.company_id = id)")
+    private int employeeCount;
+    public int getEmployeeCount() {
+        return employeeCount;
     }
 }
