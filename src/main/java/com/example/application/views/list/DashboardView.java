@@ -10,12 +10,14 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import jakarta.annotation.security.PermitAll;
 
 @Route(value = "dashboard", layout = MainLayout.class)
 @PageTitle("Dashboard | Vaadin CRM")
+@PermitAll
 public class DashboardView extends VerticalLayout {
 
-    private CRMService service;
+    private final CRMService service;
 
     public DashboardView(CRMService service) {
         this.service = service;
@@ -26,17 +28,16 @@ public class DashboardView extends VerticalLayout {
     }
 
     private Component getCompaniesChart() {
-
         Chart chart = new Chart(ChartType.PIE);
         DataSeries dataSeries = new DataSeries();
-        service.findAllCompanies().forEach(company -> dataSeries.add(new DataSeriesItem(company.getName() + "\t-\t"+company.getEmployeeCount(),company.getEmployeeCount())));
+        service.findAllCompanies().forEach(company -> dataSeries.add(new DataSeriesItem(company.getName() + "\t-\t" + company.getEmployeeCount(), company.getEmployeeCount())));
         chart.getConfiguration().setSeries(dataSeries);
         return chart;
     }
 
     private Component getContactStats() {
 
-        Span stats = new Span(service.countContacts() + " contact");
+        Span stats = new Span(service.countContacts() + " contact(s)");
         stats.addClassNames("text-xl", "mt-m");
         return stats;
     }

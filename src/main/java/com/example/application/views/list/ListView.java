@@ -2,12 +2,9 @@ package com.example.application.views.list;
 
 import com.example.application.data.entity.Contact;
 import com.example.application.data.service.CRMService;
-import com.vaadin.flow.component.AbstractField;
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.ComponentEventListener;
-import com.vaadin.flow.component.HasValue;
+import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -15,18 +12,20 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import jakarta.annotation.security.PermitAll;
 
 
 @PageTitle("Contacts | Vaadin CRM")
 @Route(value = "", layout = MainLayout.class)
+@PermitAll
 public class ListView extends VerticalLayout {
 
 
     private final CRMService service;
     Grid<Contact> grid = new Grid<>(Contact.class);
     TextField filterText = new TextField();
-
     ContactForm contactForm;
+
 
     public ListView(CRMService service) {
         this.service = service;
@@ -48,7 +47,6 @@ public class ListView extends VerticalLayout {
         contactForm.setContact(null);
         contactForm.setVisible(false);
         removeClassName("editing");
-
     }
 
     private void updateList() {
@@ -99,9 +97,39 @@ public class ListView extends VerticalLayout {
         filterText.addValueChangeListener((HasValue.ValueChangeListener<AbstractField.ComponentValueChangeEvent<TextField, String>>) textFieldStringComponentValueChangeEvent -> updateList());
 
         Button addContactBtn = new Button("Add contact");
+        addContactBtn.addClickListener((ComponentEventListener<ClickEvent<Button>>) buttonClickEvent -> displayAddContactView());
+
         HorizontalLayout toolBar = new HorizontalLayout(filterText, addContactBtn);
         toolBar.addClassName("toolbar");
         return toolBar;
+    }
+
+    private void displayAddContactView() {
+
+
+        Dialog addContactDialog = new Dialog();
+
+        AddContactForm addContactForm = new AddContactForm(service.findAllCompanies(), service.findAllStatuses());
+        addContactForm.addCloseListener((ComponentEventListener<AddContactForm.CloseEvent>) closeEvent -> addContactDialog.close());
+        addContactForm.addSaveListener((ComponentEventListener<AddContactForm.SaveEvent>) saveEvent -> {
+            saveContact(saveEvent);
+            addContactDialog.close();
+        });
+
+        addContactDialog.add(addContactForm);
+
+        addContactDialog.setHeaderTitle("New Contact Form");
+        addContactDialog.setWidth("40em");
+        addContactDialog.setHeight("40em");
+        addContactDialog.setCloseOnOutsideClick(false);
+        addContactDialog.open();
+
+
+    }
+
+    private void saveContact(AddContactForm.SaveEvent saveEvent) {
+        service.saveContact(saveEvent.getContact());
+        updateList();
     }
 
     private void configureGrid() {
